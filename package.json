@@ -1,6 +1,6 @@
 {
   "name": "@bscrypto-team/wizzard-stepper",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Wizzard stepper",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -17,7 +17,7 @@
     "@bscrypto-team:registry": "https://npm.pkg.github.com"
   },
   "scripts": {
-    "prepare": "install-peers",
+    "prebuild": "install-peers",
     "build": "tsc --declaration && tsc-alias",
     "typescript": "tsc --noEmit",
     "lint": "eslint .",
