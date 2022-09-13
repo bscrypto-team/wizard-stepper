@@ -1,0 +1,49 @@
+name: Node.js Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint
+      - run: yarn typescript
+      - run: yarn build
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r build.zip build
+      - name: Archive build
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: build.zip
+
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+      - uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq build.zip -d .
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://npm.pkg.github.com
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.PKG_SECRET_TOKEN}}

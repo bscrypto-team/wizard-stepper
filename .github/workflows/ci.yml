@@ -1,0 +1,43 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  main:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: install
+        run: yarn install
+
+      - name: linter
+        run: yarn lint
+
+      - name: tsc
+        run: yarn typescript
+
+  # create-release:
+  #   runs-on: ubuntu-18.04
+
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: martinbeentjes/npm-get-version-action@main
+  #     - name: Try to create release
+  #       uses: actions/create-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.PKG_SECRET_TOKEN }}
+  #       with:
+  #         tag_name: ${{ github.ref }}
+  #         release_name: Release ${{ github.ref }}
+  #         body: |
+  #           Changes in this Release
+  #           - First Change
+  #           - Second Change
+  #         draft: false
+  #         prerelease: false

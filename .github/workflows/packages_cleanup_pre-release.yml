@@ -1,0 +1,35 @@
+name: 'Packages cleanup - pre-release'
+
+on:
+  workflow_dispatch:
+    inputs:
+      packageName:
+        description: 'Name of the package'
+        default: 'template'
+        required: true
+        type: choice
+        options:
+          - 'template'
+      versionsToKeep:
+        description: 'Number of latest versions to keep'
+        required: true
+        default: '5'
+        type: choice
+        options:
+          - '0'
+          - '1'
+          - '5'
+          - '10'
+          - '15'
+          - '20'
+          - '30'
+
+jobs:
+  delete-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/delete-package-versions@v3
+        with:
+          package-name: ${{ inputs.packageName }}
+          min-versions-to-keep: ${{ inputs.versionsToKeep }}
+          delete-only-pre-release-versions: 'true'
