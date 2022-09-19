@@ -1,5 +1,6 @@
 import { clone, debounce, merge } from 'lodash'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { findElement } from '~/helpers/findElement'
 import {
   PathName,
   StepContentRendererFc,
@@ -22,7 +23,7 @@ const EmptyRenderer: React.FC = ({ children }) => <>{children}</>
 export class WizzardStepperFactory<T extends WizzardValue> {
   private context: React.Context<WizzardInternalContext<T> | null>
   private options: WizzardStepperFactoryOptions<T>
-  private DEFAULT_STEP_REQUIRES = WizzardStepRequiresEnum.NONE
+  private DEFAULT_STEP_REQUIRES = WizzardStepRequiresEnum.STEP_BEFORE
 
   constructor(options: WizzardStepperFactoryOptions<T>) {
     this.options = options
@@ -151,7 +152,17 @@ export class WizzardStepperFactory<T extends WizzardValue> {
           unregisterStep={unregisterStep}
         ></WizzardStep>
       ),
-      [props, isActive, setStep, Renderer, step, activeStep, registerStep, unregisterStep]
+      [
+        props,
+        isActive,
+        stepIndex,
+        setStep,
+        Renderer,
+        step,
+        activeStep,
+        registerStep,
+        unregisterStep,
+      ]
     )
   }
 
@@ -434,7 +445,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
 
     const Renderer = this.options.ProviderRenderer ?? EmptyRenderer
 
-    return useMemo(
+    const content = useMemo(
       () => (
         <this.context.Provider value={ctxValue}>
           <Renderer activeStep={ctxValue.activeStep} activeStepIndex={ctxValue.activeStepIndex}>
@@ -444,5 +455,15 @@ export class WizzardStepperFactory<T extends WizzardValue> {
       ),
       [ctxValue, children, Renderer]
     )
+
+    useEffect(() => {
+      const found = findElement(content, this.Step)
+
+      if (found) {
+        setActiveStep(found.props.name)
+      }
+    }, [])
+
+    return content
   }
 }

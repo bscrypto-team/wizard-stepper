@@ -20,6 +20,7 @@
     "incremental": true,
     "paths": {
       "~/components/*": ["./src/components/*"],
+      "~/helpers/*": ["./src/helpers/*"],
       "~/hooks": ["./src/hooks"],
       "~/types": ["./src/types"]
     }
