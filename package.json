@@ -1,6 +1,6 @@
 {
   "name": "@bscrypto-team/wizzard-stepper",
-  "version": "0.1.7-pre.0",
+  "version": "0.1.8-pre.1",
   "description": "Wizzard stepper",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
