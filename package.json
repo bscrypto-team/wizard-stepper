@@ -1,7 +1,7 @@
 {
-  "name": "@bscrypto-team/wizzard-stepper",
+  "name": "@bscrypto-team/wizard-stepper",
   "version": "0.1.8",
-  "description": "Wizzard stepper",
+  "description": "Wizard stepper",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "repository": "git@github.com:bscrypto-team/wizzard-stepper.git",
