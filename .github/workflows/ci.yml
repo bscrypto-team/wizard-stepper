@@ -40,6 +40,7 @@ jobs:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-18.04
     needs: [code-check, build]
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v3
       - name: Get package.json version
@@ -84,7 +85,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
 
       - name: Clean up
-        if: steps.create_tag.outcome == 'success' && (steps.create_release.outcome == 'failure' ||  steps.get_build.outcome == 'failure'|| steps.unzip_build.outcome == 'failure' || steps.publish_package.outcome == 'failure')
+        if: failure() && steps.create_tag.outcome == 'success' && (steps.create_release.outcome == 'failure' ||  steps.get_build.outcome == 'failure'|| steps.unzip_build.outcome == 'failure' || steps.publish_package.outcome == 'failure')
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: true
