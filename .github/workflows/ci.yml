@@ -3,41 +3,121 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  main:
+  install:
     runs-on: ubuntu-18.04
-
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn install --frozen-lockfile
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r node_modules.zip node_modules
+      - name: Archive node_modules
+        uses: actions/upload-artifact@v3
+        with:
+          name: node_modules-artifact
+          path: node_modules.zip
+  code-check:
+    runs-on: ubuntu-18.04
+    needs: install
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.x
-
-      - name: install
-        run: yarn install
-
+      - name: Download node_modules artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: node_modules-artifact
+      - name: Unzip node_modules
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq node_modules.zip -d .
       - name: linter
         run: yarn lint
-
       - name: tsc
         run: yarn typescript
+  build:
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Download node_modules artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: node_modules-artifact
+      - name: Unzip node_modules
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq node_modules.zip -d .
+      - run: yarn build
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r build.zip build
+      - name: Archive build
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: build.zip
 
-  # create-release:
-  #   runs-on: ubuntu-18.04
+  create-release:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-18.04
+    needs: [code-check, build]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get package.json version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.0.6
 
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #     - uses: martinbeentjes/npm-get-version-action@main
-  #     - name: Try to create release
-  #       uses: actions/create-release@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.PKG_SECRET_TOKEN }}
-  #       with:
-  #         tag_name: ${{ github.ref }}
-  #         release_name: Release ${{ github.ref }}
-  #         body: |
-  #           Changes in this Release
-  #           - First Change
-  #           - Second Change
-  #         draft: false
-  #         prerelease: false
+      - name: Create tag
+        uses: rickstaa/action-create-tag@v1
+        id: create_tag
+        with:
+          tag: release-v${{ steps.extract_version.outputs.version }}
+          message: Release ${{ steps.extract_version.outputs.version }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PKG_SECRET_TOKEN }}
+        with:
+          tag_name: release-v${{ steps.extract_version.outputs.version }}
+          release_name: Release ${{ steps.extract_version.outputs.version }}
+          draft: false
+          prerelease: ${{ contains(steps.extract_version.outputs.version, '-pre') }}
+
+      - name: Download build artifact
+        id: get_build
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+      - name: Unzip build
+        uses: montudor/action-zip@v1
+        id: unzid_build
+        with:
+          args: unzip -qq build.zip -d .
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org
+      - name: Publish package
+        id: publish_package
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+
+      - name: Clean up
+        if: steps.create_tag.outcome == 'success' && (steps.create_release.outcome == 'failure' ||  steps.get_build.outcome == 'failure'|| steps.unzid_build.outcome == 'failure' || steps.publish_package.outcome == 'failure')
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: release-v${{ steps.extract_version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PKG_SECRET_TOKEN }}
