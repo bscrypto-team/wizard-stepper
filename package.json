@@ -23,16 +23,7 @@
     "prettier:fix": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\" ",
     "prettier:check": "prettier --check \"**/*.+(js|jsx|ts|tsx|json|css|md)\" ",
     "pretty-quick:fix": "pretty-quick --staged --patern \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
-    "release:setup": "yarn config set version-git-tag true && yarn config set version-tag-prefix release-v",
-    "release:patch": "yarn release:setup && yarn version --patch",
-    "release:minor": "yarn release:setup && yarn version --minor",
-    "release:major": "yarn release:setup && yarn version --major",
-    "release:pre:major": "yarn release:setup && yarn version --premajor --preid pre",
-    "release:pre:minor": "yarn release:setup && yarn version --preminor --preid pre",
-    "release:pre:patch": "yarn release:setup && yarn version --prepatch --preid pre",
-    "release:pre:release": "yarn release:setup && yarn version --prerelease --preid pre",
-    "husky-install": "husky install",
-    "postversion": "bash bin/pushTag.sh"
+    "husky-install": "husky install"
   },
   "peerDependencies": {
     "react": ">= 17.0.2 < 18.0.0",
