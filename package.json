@@ -1,10 +1,10 @@
 {
   "name": "@bscrypto-team/wizard-stepper",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Wizard stepper",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
-  "repository": "git@github.com:bscrypto-team/wizzard-stepper.git",
+  "repository": "git@github.com:bscrypto-team/wizard-stepper.git",
   "author": "Andrés Paredes <paredesandres235@gmail.com>",
   "license": "MIT",
   "files": [
