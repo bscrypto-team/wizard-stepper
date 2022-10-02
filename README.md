@@ -1,4 +1,8 @@
-# Wizzard Stepper 2.0
+# Wizzard Stepper
+
+## Disclaimer !
+
+This project is experimental and is being tested for now
 
 ## Intro
 
