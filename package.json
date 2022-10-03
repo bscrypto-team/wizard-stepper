@@ -1,6 +1,6 @@
 {
-  "name": "@bscrypto-team/wizard-stepper",
-  "version": "0.1.11",
+  "name": "@ppm-team/wizard-stepper",
+  "version": "0.1.12",
   "description": "Wizard stepper",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -13,7 +13,7 @@
     "/@types"
   ],
   "publishConfig": {
-    "@bscrypto-team:registry": "https://registry.npmjs.org"
+    "@ppm-team:registry": "https://registry.npmjs.org"
   },
   "scripts": {
     "build": "tsc --declaration && tsc-alias",
