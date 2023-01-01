@@ -166,7 +166,10 @@ export class WizzardStepperFactory<T extends WizzardValue> {
     )
   }
 
-  private StepperHeaderItem: React.VFC<{ step: WizzardStepItemExtended<T> }> = ({ step }) => {
+  private StepperHeaderItem: React.FC<{ step: WizzardStepItemExtended<T>; stepNumber: number }> = ({
+    step,
+    stepNumber,
+  }) => {
     const { isStepAvailable, activeStep, isStepLast } = this.useInternalContext()
     const { setStep } = this.useWizzardContext()
 
@@ -186,6 +189,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
         isLast={isLast}
         isSelected={activeStep === step.key}
         setStep={_setStep}
+        stepNumber={stepNumber}
       />
     )
   }
@@ -197,8 +201,8 @@ export class WizzardStepperFactory<T extends WizzardValue> {
 
     return (
       <Renderer activeStep={activeStep} activeStepIndex={activeStepIndex}>
-        {registeredSteps.map((step) => (
-          <this.StepperHeaderItem key={step.key} step={step} />
+        {registeredSteps.map((step, index) => (
+          <this.StepperHeaderItem key={step.key} step={step} stepNumber={index + 1} />
         ))}
       </Renderer>
     )
