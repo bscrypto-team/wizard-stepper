@@ -23,6 +23,7 @@ export type WizzardInternalContext<T extends WizzardValue> = {
   registerStep: (step: WizzardStepItemExtended<T>) => void
   updateStep: (key: PathName<T>, step: Omit<Partial<WizzardStepItemExtended<T>>, 'key'>) => void
   isStepAvailable: (key: PathName<T>) => boolean
+  isStepLast: (key: PathName<T>) => boolean
   unregisterStep: (step: PathName<T>) => void
   updateDataCache: <Key extends PathName<T>>(
     key: Key,

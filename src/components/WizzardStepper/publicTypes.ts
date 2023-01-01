@@ -54,6 +54,7 @@ export type StepRendererProps<T extends WizzardValue = WizzardValue> = {
   setStep: () => void
   isSelected: boolean
   isActive: boolean
+  isLast: boolean
 }
 export type StepRendererFc<T extends WizzardValue = WizzardValue> = React.VFC<StepRendererProps<T>>
 

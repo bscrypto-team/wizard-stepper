@@ -167,10 +167,11 @@ export class WizzardStepperFactory<T extends WizzardValue> {
   }
 
   private StepperHeaderItem: React.VFC<{ step: WizzardStepItemExtended<T> }> = ({ step }) => {
-    const { isStepAvailable, activeStep } = this.useInternalContext()
+    const { isStepAvailable, activeStep, isStepLast } = this.useInternalContext()
     const { setStep } = this.useWizzardContext()
 
     const isAvailable = isStepAvailable(step.key)
+    const isLast = isStepLast(step.key)
 
     const _setStep = useCallback(() => {
       setStep(step.key)
@@ -182,6 +183,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
       <this.options.StepRenderer
         step={step}
         isActive={isAvailable}
+        isLast={isLast}
         isSelected={activeStep === step.key}
         setStep={_setStep}
       />
@@ -311,6 +313,12 @@ export class WizzardStepperFactory<T extends WizzardValue> {
       return false
     }, [])
 
+    const isStepLast = useCallback<WizzardInternalContext<T>['isStepLast']>((step) => {
+      const foundStep = stepsRef.current.findIndex((s) => s.key === step)
+
+      return foundStep === stepsRef.current.length - 1
+    }, [])
+
     const _setActiveStep = useCallback(
       (key: PathName<T>) => {
         if (isStepAvailable(key)) {
@@ -416,6 +424,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
         getStepIndex,
         setActiveStep: _setActiveStep,
         isStepAvailable,
+        isStepLast,
         registerStep,
         updateStep,
         unregisterStep,
@@ -427,6 +436,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
       [
         getStepIndex,
         isStepAvailable,
+        isStepLast,
         _setActiveStep,
         registerStep,
         unregisterStep,
