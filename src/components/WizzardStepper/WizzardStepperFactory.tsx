@@ -49,7 +49,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
 
       const next = registeredStepsRef.current[foundStep + 1]
 
-      next.key && setActiveStep(next.key)
+      next?.key && setActiveStep(next.key)
     }, [setActiveStep, activeStep])
 
     return useMemo(
