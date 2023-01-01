@@ -202,7 +202,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
     )
   }
 
-  public Provider: React.FC<WizzardStepperProviderProps<T>> = ({
+  public Provider: React.FC<React.PropsWithChildren<WizzardStepperProviderProps<T>>> = ({
     children,
     defaultValues,
     handleSubmit,
