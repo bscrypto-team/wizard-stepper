@@ -1,5 +1,9 @@
 import { Meta, Story } from '@storybook/react'
-import { WizzardStepperFactory, WizzardStepperHandleSubmit } from '../components'
+import {
+  WizzardStepperFactory,
+  WizzardStepperHandleSubmit,
+  WizzardStepperOnStepChange,
+} from '../components'
 
 type NewFormType = {
   first: { first: number }
@@ -69,8 +73,14 @@ const NewWizzardTemplate: Story = () => {
     // eslint-disable-next-line no-console
     console.log('SUBMIT', values, { ...allValues })
   }
+
+  const onStepChange: WizzardStepperOnStepChange<NewFormType> = (step) => {
+    // eslint-disable-next-line no-console
+    console.log(step)
+  }
+
   return (
-    <Factory.Provider defaultValues={{}} handleSubmit={handleSubmit}>
+    <Factory.Provider defaultValues={{}} handleSubmit={handleSubmit} onStepChange={onStepChange}>
       <Factory.StepperHeader />
 
       <Factory.Step name="first">

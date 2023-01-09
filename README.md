@@ -39,7 +39,7 @@ const Factory = new WizzardStepperFactory({
 
 For correct behaviour, given part of application push be wrapped with Provider from `WizzardStepperFactory`, like so:
 
-```ts
+```tsx
 // src/App.tsx
 
 import { Stepper } from './Stepper'
@@ -55,7 +55,7 @@ const App: React.VFC = () => {
 
 For Stepper to register that given step exists, `<Step>` component must be used. Stepper does not display steps without it being explicitly defined with `<Step>` component
 
-```ts
+```tsx
 // src/Stepper.tsx
 
 import { InfoStep } from './InfoStep'
@@ -71,7 +71,7 @@ export const Stepper: React.VFC = () => {
 
 You can also access the step context inside of the given Step, or you can access wizzards context
 
-```ts
+```tsx
 // src/InfoStep.tsx
 
 import { InfoStep } from './InfoStep';
@@ -88,7 +88,7 @@ export const InfoStep: React.VFC = () => {
 
 ## Minimal example
 
-```ts
+```tsx
 type NewFormType = {
     first: { first: number }
     second: { second: number }
@@ -157,8 +157,14 @@ const WizardProcess: React.FC = () => {
         // eslint-disable-next-line no-console
         console.log('SUBMIT', values, { ...allValues })
     }
+
+    const onStepChange: WizzardStepperOnStepChange<NewFormType> = (step) => {
+        // eslint-disable-next-line no-console
+        console.log(step)
+    }
+    
     return (
-        <Factory.Provider defaultValues={{}} handleSubmit={handleSubmit}>
+        <Factory.Provider defaultValues={{}} handleSubmit={handleSubmit} onStepChange={onStepChange}>
     <Factory.StepperHeader />
 
     <Factory.Step name="first">

@@ -212,6 +212,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
     children,
     defaultValues,
     handleSubmit,
+    onStepChange,
   }) => {
     const [dataCache, setData] = useState(defaultValues)
     const [errorsCache, setErrors] = useState<WizzardErrors<T>>({})
@@ -326,6 +327,10 @@ export class WizzardStepperFactory<T extends WizzardValue> {
     const _setActiveStep = useCallback(
       (key: PathName<T>) => {
         if (isStepAvailable(key)) {
+          if (onStepChange) {
+            onStepChange(key)
+          }
+
           setActiveStep(key)
 
           return true
@@ -333,7 +338,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
 
         return false
       },
-      [isStepAvailable]
+      [isStepAvailable, onStepChange]
     )
 
     const updateDataCache = useCallback<WizzardInternalContext<T>['updateDataCache']>(

@@ -44,9 +44,14 @@ export type WizzardStepperHandleSubmit<T extends WizzardValue> = (
   helpers: WizzardStepperProviderSubmitHelperProps<T>
 ) => Promise<void> | void
 
+export type WizzardStepperOnStepChange<T extends WizzardValue> = (
+  step: keyof T
+) => Promise<void> | void
+
 export type WizzardStepperProviderProps<T extends WizzardValue> = {
   defaultValues: DeepPartial<T>
   handleSubmit: WizzardStepperHandleSubmit<T>
+  onStepChange?: WizzardStepperOnStepChange<T>
 }
 
 export type StepRendererProps<T extends WizzardValue = WizzardValue> = {
