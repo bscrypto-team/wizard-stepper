@@ -164,7 +164,8 @@ const WizardProcess: React.FC = () => {
     }
     
     return (
-        <Factory.Provider defaultValues={{}} handleSubmit={handleSubmit} onStepChange={onStepChange}>
+        <Factory.Provider defaultValues={{ first: { first: 0 },}} handleSubmit={handleSubmit} onStepChange={onStepChange}
+                          initiallyLoadStep="second">
     <Factory.StepperHeader />
 
     <Factory.Step name="first">

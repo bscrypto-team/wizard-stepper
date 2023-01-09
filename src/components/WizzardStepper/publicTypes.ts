@@ -52,6 +52,9 @@ export type WizzardStepperProviderProps<T extends WizzardValue> = {
   defaultValues: DeepPartial<T>
   handleSubmit: WizzardStepperHandleSubmit<T>
   onStepChange?: WizzardStepperOnStepChange<T>
+
+  // Loads step if it's being available
+  initiallyLoadStep?: PathName<T>
 }
 
 export type StepRendererProps<T extends WizzardValue = WizzardValue> = {

@@ -213,6 +213,7 @@ export class WizzardStepperFactory<T extends WizzardValue> {
     defaultValues,
     handleSubmit,
     onStepChange,
+    initiallyLoadStep,
   }) => {
     const [dataCache, setData] = useState(defaultValues)
     const [errorsCache, setErrors] = useState<WizzardErrors<T>>({})
@@ -246,6 +247,9 @@ export class WizzardStepperFactory<T extends WizzardValue> {
           return
         }
 
+        if (newStep.key.toString() in dataCache) {
+          newStep.completed = true
+        }
         stepsRef.current.push({ ...newStep })
 
         updateSteps()
@@ -420,6 +424,12 @@ export class WizzardStepperFactory<T extends WizzardValue> {
       dataCacheRef.current = dataCache
       errorsCacheRef.current = errorsCache
     }, [handleSubmit, dataCache, errorsCache])
+
+    useEffect(() => {
+      if (isReady && initiallyLoadStep) {
+        _setActiveStep(initiallyLoadStep)
+      }
+    }, [isReady, initiallyLoadStep, stepsRef.current])
 
     const ctxValue = useMemo<WizzardInternalContext<T>>(
       () => ({

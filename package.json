@@ -1,6 +1,6 @@
 {
   "name": "@ppm-team/wizard-stepper",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "Wizard stepper",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
