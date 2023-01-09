@@ -24,6 +24,7 @@
     "pretty-quick:fix": "pretty-quick --staged --patern \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
     "husky-install": "husky install",
     "storybook": "start-storybook -p 6006",
+    "storybook-linux": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "peerDependencies": {
