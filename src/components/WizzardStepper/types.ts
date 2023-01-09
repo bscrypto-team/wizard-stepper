@@ -10,6 +10,8 @@ import {
   StepContentRendererFc,
 } from './publicTypes'
 
+export type WizzardData<T extends WizzardValue> = DeepPartial<T>
+
 export type WizzardInternalContext<T extends WizzardValue> = {
   _data: DeepPartial<T>
   _errors: WizzardErrors<T>
