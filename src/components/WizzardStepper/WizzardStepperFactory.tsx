@@ -249,7 +249,8 @@ export class WizzardStepperFactory<T extends WizzardValue> {
 
         if (
           newStep.key.toString() in dataCache &&
-          (dataCache[newStep.key] !== undefined && dataCache[newStep.key] !== null)
+          dataCache[newStep.key] !== undefined &&
+          dataCache[newStep.key] !== null
         ) {
           newStep.completed = true
         }
